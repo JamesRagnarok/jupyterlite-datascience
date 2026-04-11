@@ -1,83 +1,89 @@
-# Xeus-Lite demo
+# qPCR Normalized Expression Analysis (JupyterLite Demo)
 
-[![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://jupyterlite.github.io/xeus-lite-demo/notebooks/?path=demo.ipynb)
+[![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://jamesragnarok.github.io/jupyterlite-datascience/)
 
-This GitHub template allows you to create deployments of JupyterLite with a custom set of conda packages.
+This repository demonstrates a complete workflow for analyzing qPCR data using Python—from raw Cq values to normalized gene expression, followed by statistical analysis using appropriate experimental designs.
 
-## 💡 How to make your own deployment
+The project is built with **JupyterLite** and deployed via **GitHub Pages**, allowing users to run the analysis entirely in a web browser without local installation.
 
-Creating a new deployment can be done in three easy steps:
+👉 **Live Demo:**  
+https://jamesragnarok.github.io/jupyterlite-datascience/
 
-**Step 1: Apply the GitHub template**
+---
 
-1. Click the **"Use this template"** button in the upper right corner of the GitHub repository.
-2. Choose a name for your project and select the GitHub organization where you want to create it.
-3. Then hit **"Create repository from template"** to finalize the setup.
+## 📌 Project Overview
 
-**Step 2: Enable building the GitHub pages from GitHub actions.**
+Quantitative PCR (qPCR) generates Cq (quantification cycle) values that require normalization and statistical analysis to yield biologically meaningful conclusions.
 
-1. Once your repository is created, enable GitHub Pages by configuring GitHub Actions. This will build and deploy your site automatically.
-2. Your deployment will be accessible at the following URL: https://{USERNAME}.github.io/{DEMO_REPO_NAME}.
+This project demonstrates:
 
-**Step 3: Customize your conda environment**
+1. Conversion of **Cq values → ΔCq → ΔΔCq**
+2. Calculation of **normalized expression (relative expression)**
+3. Statistical analysis under two common experimental designs:
+   - **CRD (Completely Randomized Design)** → One-way ANOVA  
+   - **RCBD (Randomized Complete Block Design, batch as block)** → Two-way ANOVA (*without interaction term*)
 
-1. Update your ``environment.yml`` file to include the required packages.
-2. This ensures that your environment has all the necessary dependencies.
+---
 
-## 🎬 Visual Guide
+## 🔬 Methodological Background
 
-For a step-by-step visual guide, check out the screencast below:
+### qPCR Normalization
 
-![Deploy your own](deploy.gif)
+- ΔCq = Cq(target) − Cq(reference)
+- ΔΔCq = ΔCq(sample) − ΔCq(control)
+- Normalized expression = 2^(-ΔΔCq)
 
-## 📦 How to install kernels and packages
+---
 
-You can install specific kernels and extra packages by adding them to the ``environment.yml`` file.
+## 📊 Statistical Framework
 
-See https://jupyterlite-xeus.readthedocs.io/en/latest/environment.html for more documentation.
+### 1. CRD — One-Way ANOVA
 
-### Example 1: JupyterLite with NumPy and Matplotlib
+Model:
+Expression ~ Treatment
 
-To create a JupyterLite deployment with NumPy and Matplotlib pre-installed, edit the ``environment.yml`` file as follows:
+---
 
-```yml
-name: xeus-kernel
-channels:
-  - https://repo.prefix.dev/emscripten-forge-dev
-  - https://repo.prefix.dev/conda-forge
-dependencies:
-  - xeus-python
-  - numpy
-  - matplotlib
-```
+### 2. RCBD — Two-Way ANOVA (No Interaction)
 
-### Example 2: JupyterLite with R and coursekata
+Model:
+Expression ~ Treatment + Batch
 
-To use the R kernel and the coursekata package, edit the environment.yml file as follows:
+---
 
-```yml
-name: xeus-kernel
-channels:
-  - https://repo.prefix.dev/emscripten-forge-dev
-  - https://repo.prefix.dev/conda-forge
-dependencies:
-  - xeus-r
-  - r-coursekata
-```
+### 3. Multiple Comparisons
 
-### Example 3: JupyterLite with C++
+Post hoc tests are applied after ANOVA to identify significant differences between groups.
 
-To use the C++ kernel, edit the environment.yml file as follows:
+---
 
-```yml
-name: xeus-kernel
-channels:
-  - https://repo.prefix.dev/emscripten-forge-dev
-  - https://repo.prefix.dev/conda-forge
-dependencies:
-  - xeus-cpp
-```
+## 🚀 Features
 
-## 📦 How to install other jupyterlite plugins
+- Fully browser-based (JupyterLite)
+- End-to-end qPCR workflow
+- Supports CRD and RCBD
+- Interactive notebooks
+- No installation required
 
-If you want to install jupyterlite plugins, e.g. `jupyterlite-terminal`, add those plugins to the `.github/build-environment.yml` file.
+---
+
+## 🧭 How to Use
+
+1. Open the demo
+2. Run the notebook
+3. Modify inputs as needed
+
+---
+
+## ⚙️ Technical Details
+
+- Python (v3.11)
+- pandas (v1.5.3), numpy, scipy, statsmodels, bioinfokit, scikit_posthocs
+- JupyterLite
+
+---
+
+## 📜 References
+
+[How to Perform ANOVA in Python](https://www.reneshbedre.com/blog/anova.html)
+[CFX Maestro Software User Guide v2.3](https://www.bio-rad.com/sites/default/files/webroot/web/pdf/lsr/literature/10000126764.pdf)
